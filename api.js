@@ -1,20 +1,65 @@
 const express = require('express')
-var request = require('request');
+var request = require('request')
+const nodemailer = require('nodemailer')
+let bodyParser = require('body-parser')
 
 const api_url = 'https://api.chucknorris.io/jokes/random'
 
+let transport = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    auth: {
+       user: 'mytestemailap10000@gmail.com',
+       pass: '4FBCwyZheeGjEt2'
+    }
+});
 
-var emails = new Array()
+var emails = ['andreypilip1122@gmail.com']
 const app = express()
+
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json())
 
 app.get('/getEmails', (req, res) => {
     res.status(200).json({message: emails})
     return
 })
 
-app.post('/addChuckJoke', (req, res) => {
+app.post('/addEmail', (req, res) => {
+    const email = req.body['email']
+    console.log(req.body)
+    if (email){
+        emails.push(email)
+        res.status(200).json({message: 'Success...'})
+    }
+    else{
+        res.status(400).json({message: 'No email parameter...'})
+    }
+    return
+})
+
+app.get('/sendChuckJoke', (req, res) => {
     request(api_url, function (error, response, body) {
-        emails.push({'email': JSON.parse(body)['id']+'@something.com', 'joke': JSON.parse(body)['value']})
+        var emails_s = ''
+        var joke = JSON.parse(body)['value']
+        emails.forEach(element => {
+            emails_s += element + ', '
+        });
+        // console.log(emails[0])
+        const message = {
+            from: 'elonmusk@tesla.com', // Sender address
+            to: emails_s,         // List of recipients
+            subject: 'Chuck Joke', // Subject line
+            text: joke // Plain text body
+        };
+        transport.sendMail(message, function(err, info) {
+            if (err) {
+              console.log(err)
+            } else {
+              console.log(info);
+            }
+        });
+        // emails.push({'email': JSON.parse(body)['id']+'@something.com', 'joke': JSON.parse(body)['value']})
         res.status(200).json({message: 'Successfully'})
         return
     })
@@ -34,10 +79,10 @@ app.delete('/deleteEmail', (req, res) => {
 })
 
 app.put('/changeEmail', (req, res) => {
-    var id = req.query.id
-    var message = req.query.newmessage
-    if (id && message){
-        emails[id]['joke'] = message
+    var old_email = req.body['email']
+    var new_email = req.body['new_email']
+    if (old_email && new_email){
+        emails[emails.indexOf(old_email)] = new_email
         res.status(200).json({message: 'Successfully...', emails})
     }
     else{
