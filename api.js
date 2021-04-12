@@ -47,10 +47,10 @@ app.get('/sendChuckJoke', (req, res) => {
         });
         // console.log(emails[0])
         const message = {
-            from: 'elonmusk@tesla.com', // Sender address
-            to: emails_s,         // List of recipients
-            subject: 'Chuck Joke', // Subject line
-            text: joke // Plain text body
+            from: 'test@email.com',
+            to: emails_s,
+            subject: 'Chuck Joke',
+            text: joke
         };
         transport.sendMail(message, function(err, info) {
             if (err) {
@@ -59,7 +59,6 @@ app.get('/sendChuckJoke', (req, res) => {
               console.log(info);
             }
         });
-        // emails.push({'email': JSON.parse(body)['id']+'@something.com', 'joke': JSON.parse(body)['value']})
         res.status(200).json({message: 'Successfully'})
         return
     })
