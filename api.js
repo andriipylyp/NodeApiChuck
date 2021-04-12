@@ -9,6 +9,7 @@ const app = express()
 
 app.get('/getEmails', (req, res) => {
     res.status(200).json({message: emails})
+    return
 })
 
 app.post('/addChuckJoke', (req, res) => {
@@ -28,8 +29,8 @@ app.delete('/deleteEmail', (req, res) => {
     }
     else{
         res.status(400).json({message: 'Id not exist...'})
-        return
     }
+    return
 })
 
 app.put('/changeEmail', (req, res) => {
@@ -41,8 +42,8 @@ app.put('/changeEmail', (req, res) => {
     }
     else{
         res.status(400).json({message: 'Id not exist...'})
-        return
     }
+    return
 })
 
 
