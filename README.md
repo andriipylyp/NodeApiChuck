@@ -4,8 +4,10 @@ REST API docs:
 
 GET /getEmails | returns all emails in a json format
 
-POST /addChuckJoke | create a new email and adds a joke to it
+GET /sendChuckJoke | send Chuck Noris Joke to all emails in array
 
-PUT /changeEmail {id=int, newmessage=string} | replace a joke from email by index in an email array with a new message
+POST /addEmail {email=string} | adds new email to array
+
+PUT /changeEmail {email=string, new_email=string} | replace an email with new email
 
 DELETE /deleteEmail {id=int} | delete email by an index
