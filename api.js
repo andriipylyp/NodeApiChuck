@@ -85,7 +85,7 @@ app.put('/changeEmail', (req, res) => {
         res.status(200).json({message: 'Successfully...', emails})
     }
     else{
-        res.status(400).json({message: 'Id not exist...'})
+        res.status(400).json({message: 'email or new_email not exist...'})
     }
     return
 })
